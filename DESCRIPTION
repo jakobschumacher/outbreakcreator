@@ -5,8 +5,9 @@ Version: 0.1.0
 Author: Jakob Schumacher
 Maintainer: Jakob Schumacher <jakob.schumacher@web.de>
 Description: Infect the world and create an outbreak - or at least a dataset of an outbreak.
-License:  MIT + file LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
     randomNames
+RoxygenNote: 6.1.1

@@ -1,7 +1,7 @@
 #' Create an outbreak
 #'
 #' @section Background:
-#' Infect the world and create an outbreak - or at least a dataset of an outbreak
+#' Infect the world - or at least create a dataset of an varicella outbreak in centers for foreigners
 #'
 #' This dataset simulates an outbreak of varicella in german centers for foreigners. It is loosely based on
 #' the situation in 2015, when the numbers of foreigners seeking asylum exeded the available places
@@ -15,10 +15,22 @@
 #'
 #' @author Jakob Schumacher (\email{jakob.schumacher@web.de})
 #'
-#' @references
+#' @param size The total number of the population. A number.
+#' @param startDate The start of the period in which the outbreak takes place. A chracter vector of a date e.g. "2015-01-01"
+#' @param endDate The end of the period in which the outbreak takes place. A chracter vector of a date e.g. "2015-12-31"
+#' @param dateOfInfection The date the outbreak begins. . A chracter vector of a date e.g. "2015-06-01"
+#' @param centerNames The names of the centers at which the outbreak takes place. A character vector
+#' @param meanStayAtCenter The mean time a person spends at a center
+#' @param disease The name of the disease. A character vector.
+#' @param diseaseIncubationPeriod The incubation period of a disease
 #'
+#' @references
+#' Bericht über die dem Robert Koch-Institut übermittelte meldepflichtige Infektionskrankheiten bei Asylsuchenden in Deutschland
+#' https://www.rki.de/DE/Content/Gesundheitsmonitoring/Gesundheitsberichterstattung/GesundAZ/Content/A/Asylsuchende/Inhalt/meldepflichtige_Infektionskrankheiten_bei_Asylsuchenden.pdf?__blob=publicationFile
 #'
 #' @examples
+#'
+#'create_outbreak()
 #'
 
 create_outbreak <- function(size = 500,
@@ -85,5 +97,3 @@ create_outbreak <- function(size = 500,
   data
 }
 
-
-data <- create_outbreak()
