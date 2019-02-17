@@ -21,16 +21,15 @@
 #' @examples
 #'
 
-set.seed(15)
-
 create_outbreak <- function(size = 500,
                             startDate = "2015-01-01",
                             endDate = "2015-12-31",
                             dateOfInfection = "2015-05-06",
                             centerNames = c("Oranienburger Str", "Buchholzerstr", "Platz der Luftbruecke", "Bizetstr"),
-                            meanStayAtCenter = 50
+                            meanStayAtCenter = 50,
+                            disease = "varicella",
+                            diseaseIncubationPeriod = 14
                             ) {
-
 
   startDate = as.numeric(as.Date(startDate, origin = "1970-01-01")) # get date into the right format
   endDate = as.numeric(as.Date(endDate, origin = "1970-01-01")) # get date into the right format
@@ -42,8 +41,7 @@ create_outbreak <- function(size = 500,
   probCenters <- runif(length(centerNames), 0, 1)
 
   # Create random personal data
-  library(randomNames) # load name generator package
-  library(randomNames)  # load name generator package
+  suppressMessages(library(randomNames)) # load name generator package
   data <- data.frame(name = randomNames::randomNames(size, return.complete.data = TRUE))
   data$age = round(runif(size, min = 0, max = 35),0)
 
@@ -55,7 +53,7 @@ create_outbreak <- function(size = 500,
   data$arrival2 = data$leave1 + sample(5:15, size = size, replace = TRUE)
   data$leave2 = data$arrival2 + sample(rnorm(size, meanStayAtCenter, sd = meanStayAtCenter/2), size = size, replace = TRUE)
 
-  # Throw in a few background cases
+  # Generate background cases
   data$onset = sample(c(startDate:endDate, rep(NA,totalLength*9)), size = size, replace = TRUE)
 
   # Generate an outbreak in one center
@@ -64,9 +62,10 @@ create_outbreak <- function(size = 500,
                             data$leave1 > dateOfInfection) |
                            (data$arrival2 < dateOfInfection &
                               data$leave2 > dateOfInfection)),
-                      rnorm(n = size, mean = (dateOfInfection + 14), sd = 8),
+                      (rgamma(1:5000, 2, scale = 20) + dateOfInfection + diseaseIncubationPeriod),
                       data$onset)
 
+  data$disease <- disease
 
   # Cleaning up
   data$onset <- as.Date(data$onset, origin = "1970-01-01")
@@ -84,12 +83,7 @@ create_outbreak <- function(size = 500,
   data$ethnicity = factor(data$ethnicity, levels = seq(1:6), labels = c("native-american", "asian", "african", "hispanic", "caucasian", "arabic"))
 
   data
-
 }
 
 
-
-plot(incidence(create_outbreak(500)$onset, interval = 7))
-
-data <- create_outbreak(500)
-
+data <- create_outbreak()
